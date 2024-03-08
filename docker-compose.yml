@@ -1,0 +1,46 @@
+version: '3'
+services:
+  php:
+    build: php
+    volumes:
+      - ./source:/var/www/html
+      - ./xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    networks:
+      - appnet
+    environment:
+      PROOPH_ENV: "development"
+
+  nginx:
+    build: nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./source:/var/www/html
+    networks:
+      - appnet
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./db_data:/var/lib/mysql
+    ports:
+      - 33006:3306
+    environment:
+       MYSQL_ROOT_PASSWORD: 123456
+       MYSQL_DATABASE: shopify
+       MYSQL_USER: shopify
+       MYSQL_PASSWORD: shopify
+    networks:
+      - appnet
+
+
+volumes:
+  db_data:
+    driver: "local"
+networks:
+  appnet:
+    driver: "bridge"
