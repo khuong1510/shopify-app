@@ -18,10 +18,10 @@ use Shopify\Context;
 */
 
 /**
- * Callback function after installing app and retrieve access token
+ * Homepage for showing access token
  */
 Route::get('/', function () {
-    $filePath = 'access_token.txt'; // storage/app/public/access_token.txt
+    $filePath = 'access_token.txt'; // storage/app/access_token.txt
     $accessToken = Storage::disk('local')->exists($filePath) ? Storage::disk('local')->get($filePath) : '';
     return view('welcome', ['accessToken' => $accessToken]);
 });
